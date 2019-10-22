@@ -56,12 +56,6 @@ void loop() {
   delay(1000);
   Serial.println("connecting...");
 
-  String temp = "suhucelcius=";
-  temp += celcius_1;
-  temp += "&suhufahrenheit=";
-  temp += fahrenheit_1;
-  temp += "&kelembaban=";
-  temp += humidity_1;
   //pembacaan nilai pembacaan data suhu
   Serial.print("Suhu : ");
   Serial.print(celcius_1); //format derajat celcius
@@ -74,12 +68,19 @@ void loop() {
   Serial.println(" *F");
  
   Serial.print(htoc);
-  Serial.print(" *C ");
+  Serial.println(" *C ");
 
-  if (client.connect("192.168.197.208",80)) {                                 
+  if (client.connect("192.168.197.208",2810)) {    
+    String temp = "suhuc=";
+    temp += celcius_1;
+    temp += "&suhuf=";
+    temp += fahrenheit_1;
+    temp += "&kelembaban=";
+    temp += humidity_1;  
+                               
     Serial.println("Sending to Server: ");                   
-    client.println("POST /arduino_http/webserver/add_data.php HTTP/1.1");           
-    Serial.println("POST /arduino_http/webserver/add_data.php HTTP/1.1");           
+    client.println("POST /insert-suhu HTTP/1.1");           
+    Serial.println("POST /insert-suhu HTTP/1.1");           
     client.println("Host: 192.168.197.208");
     client.println("Content-Type: application/x-www-form-urlencoded");
     client.println("Connection: close");
@@ -95,7 +96,6 @@ void loop() {
   }
 
   if(client.connected()) {    
-    Serial.println("We have abc");
     client.stop();
   }
 
